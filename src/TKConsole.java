@@ -7,8 +7,8 @@ public class TKConsole {
 
     public TKConsole() {
         this.core = new TKCore();
-        this.test1 = new MinMax(core, TKCore.PLAYER1, 4);
-        this.test2 = new MinMax(core, TKCore.PLAYER2, 7);
+        this.test1 = new MinMax(core, TKCore.PLAYER1, 7);
+        this.test2 = new MinMax(core, TKCore.PLAYER2, 10);
     }
 
     public void start() {

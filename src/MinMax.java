@@ -13,39 +13,40 @@ public class MinMax {
     }
 
     public int find(){
-        Result result = miniMax(depth, core.copy());
+        Result result = miniMax(depth, core.copy(),Integer.MIN_VALUE, Integer.MAX_VALUE);
         return result.movedPit;
     }
 
-    private Result miniMax(int depth, TKCore game){
+    private Result miniMax(int depth, TKCore game, int alpha, int beta){
         List<Integer> nextMoves = generateMoves(game);
-        int currentScore;
-        int bestScore = isMyGame(game) ? Integer.MIN_VALUE : Integer.MAX_VALUE;
-        int bestMovement = -1;
+        int score;
+        int movement = -1;
 
         if (nextMoves.isEmpty() || depth == 0) {
-            bestScore = evaluate(game);
+            alpha = evaluate(game);
+            beta = evaluate(game);
         } else {
             for (int move : nextMoves) {
                 TKCore newGame = game.copy();
                 newGame.move(move);
                 game.finish();
                 if (isMyGame(game)) {
-                    currentScore = miniMax(depth - 1, newGame).score;
-                    if (currentScore > bestScore) {
-                        bestScore = currentScore;
-                        bestMovement = move;
+                    score = miniMax(depth - 1, newGame, alpha, beta).score;
+                    if (score > alpha) {
+                        alpha = score;
+                        movement = move;
                     }
                 } else {
-                    currentScore = miniMax(depth - 1, newGame).score;
-                    if (currentScore < bestScore) {
-                        bestScore = currentScore;
-                        bestMovement = move;
+                    score = miniMax(depth - 1, newGame, alpha, beta).score;
+                    if (score < beta) {
+                        beta = score;
+                        movement = move;
                     }
                 }
+                if (alpha >= beta) break;
             }
         }
-        return new Result(bestScore,bestMovement);
+        return new Result(isMyGame(game)?alpha:beta,movement);
 
 
     }
