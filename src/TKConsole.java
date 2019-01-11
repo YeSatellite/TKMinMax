@@ -2,19 +2,33 @@ import java.util.Scanner;
 
 public class TKConsole {
     private TKCore core;
+    private MinMax test1;
+    private MinMax test2;
 
     public TKConsole() {
         this.core = new TKCore();
+        this.test1 = new MinMax(core, TKCore.PLAYER1, 4);
+        this.test2 = new MinMax(core, TKCore.PLAYER2, 7);
     }
 
     public void start() {
-        Scanner sc = new Scanner(System.in);
         while (true) {
             print();
             System.out.print("Enter: ");
-            int pit = sc.nextInt();
-            if (pit == -1) break;
-            core.move(pit - 1);
+            if (core.getCurrentPlayer()== TKCore.PLAYER1) {
+                int pit = test1.find();
+                System.out.println(pit+1);
+                core.move(pit);
+            }else {
+                int pit = test2.find();
+                System.out.println(pit+1);
+                core.move(pit);
+            }
+            if(core.finish()){
+                print();
+                System.out.println("End----------------------------");
+                break;
+            }
         }
     }
 

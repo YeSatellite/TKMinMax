@@ -38,10 +38,9 @@ public class TKCore {
             if (tmp.pits[pit] == -1){
                 Player nTmp = oppPlayer(tmp);
                 nTmp.bowl++;
-                continue;
-            }
-            tmp.pits[pit++]++;
+            }else tmp.pits[pit]++;
             balls--;
+            pit++;
         }
         pit--;
 
@@ -52,7 +51,7 @@ public class TKCore {
                 other.pits[pit] = 0;
             }
             // Tuz
-            if (other.pits[pit] == 3 && !self.haveTuz) {
+            if (other.pits[pit] == 3 && !self.haveTuz && pit!=NINE-1) {
                 self.haveTuz = true;
                 self.bowl += other.pits[pit];
                 other.pits[pit] = -1;
@@ -101,6 +100,10 @@ public class TKCore {
 
     public Player getPlayer2() {
         return player2;
+    }
+
+    public Player getPlayer() {
+        return currentPlayer == PLAYER1 ? player1 : player2;
     }
 
     public TKCore copy(){
