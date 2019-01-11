@@ -31,7 +31,7 @@ public class TKConsole {
         out.append('\n');
 
         for (int i = 8; i >= 0; i--) {
-            if (player2.getPits()[i] < 10) out.append(' ');
+            if (0 <= player2.getPits()[i] && player2.getPits()[i] < 10) out.append(' ');
             out.append(player2.getPits()[i]);
             out.append('|');
         }
@@ -44,7 +44,7 @@ public class TKConsole {
         out.append("------------------\n");
 
         for (int i = 0; i < 9; i++) {
-            if (player1.getPits()[i] < 10) out.append(' ');
+            if (0 <= player1.getPits()[i] && player1.getPits()[i] < 10) out.append(' ');
             out.append(player1.getPits()[i]);
             out.append('|');
         }

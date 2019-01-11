@@ -22,25 +22,23 @@ public class TKCore {
 
     public boolean move(int pit) {
         Player self = currentPlayer == PLAYER1 ? player1 : player2;
-        Player other = currentPlayer == PLAYER1 ? player2 : player1;
+        Player other = oppPlayer(self);
         Player tmp = self;
         int balls = tmp.pits[pit];
-        if (balls == 0) return false;
+        if (balls < 1) return false;
 
         //Move
         tmp.pits[pit] = 0;
-        if(balls==1){
-            if (++pit == NINE) {
-                tmp = other;
-                pit = 0;
-            }
-            tmp.pits[pit++]++;
-            balls--;
-        }
+        if(balls==1) pit++;
         while (balls > 0) {
             if (pit == NINE) {
-                tmp = tmp == self ? other : self;
+                tmp = oppPlayer(tmp);
                 pit = 0;
+            }
+            if (tmp.pits[pit] == -1){
+                Player nTmp = oppPlayer(tmp);
+                nTmp.bowl++;
+                continue;
             }
             tmp.pits[pit++]++;
             balls--;
@@ -49,15 +47,48 @@ public class TKCore {
 
         // Test
         if (tmp == other) {
-            if (tmp.pits[pit] % 2 == 0) {
-                self.bowl += tmp.pits[pit];
-                tmp.pits[pit] = 0;
+            if (other.pits[pit] % 2 == 0) {
+                self.bowl += other.pits[pit];
+                other.pits[pit] = 0;
             }
             // Tuz
-
+            if (other.pits[pit] == 3 && !self.haveTuz) {
+                self.haveTuz = true;
+                self.bowl += other.pits[pit];
+                other.pits[pit] = -1;
+            }
         }
         currentPlayer = !currentPlayer;
         return true;
+    }
+    
+    public boolean finish(){
+        boolean ans = false;
+        for (int p = 0; p < 2; p++) {
+            Player p1 = p == 0 ? player1 : player2;
+            Player p2 = oppPlayer(p1);
+            boolean have = false;
+            for (int i = NINE - 1; i >= 0; i--) {
+                if (p1.pits[i] > 0) {
+                    have = true;
+                    break;
+                }
+            }
+            if (!have) {
+                for (int i = 0; i < NINE; i++) {
+                    if (p2.pits[i] > 0) {
+                        p1.bowl += p2.pits[i];
+                        p2.pits[i] = 0;
+                    }
+                }
+                ans = true;
+            }
+        }
+        return ans;
+    }
+
+    private Player oppPlayer(Player player){
+        return player == player1 ? player2 : player1;
     }
 
     public boolean getCurrentPlayer() {
@@ -79,16 +110,19 @@ public class TKCore {
     public class Player{
         private int bowl;
         private int[] pits;
+        private boolean haveTuz;
 
         Player() {
             this.bowl = 0;
             this.pits = new int[NINE];
             for (int i = 0; i < NINE; i++) pits[i] = NINE;
+            this.haveTuz = false;
         }
 
-        private Player(int bowl, int[] pits) {
+        private Player(int bowl, int[] pits, boolean haveTuz) {
             this.bowl = bowl;
             this.pits = pits;
+            this.haveTuz = haveTuz;
         }
 
         public int getBowl() {
@@ -99,8 +133,12 @@ public class TKCore {
             return pits;
         }
 
+        public boolean HaveTuz() {
+            return haveTuz;
+        }
+
         Player copy(){
-            return new Player(bowl,pits.clone());
+            return new Player(bowl,pits.clone(), haveTuz);
         }
     }
 }
