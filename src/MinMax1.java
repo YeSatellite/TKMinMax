@@ -1,18 +1,17 @@
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class MinMax1 {
     private TKCore core;
     private boolean myPlayer;
     private int depth;
-    private Random r;
+    private int x;
 
-    public MinMax1(TKCore core, boolean myPlayer, int depth) {
+    public MinMax1(TKCore core, boolean myPlayer,int depth, int x) {
         this.core = core;
         this.myPlayer = myPlayer;
         this.depth = depth;
-        r = new Random();
+        this.x = x;
     }
 
     public int find(){
@@ -61,8 +60,8 @@ public class MinMax1 {
         int score = 0;
         score += game.getPlayer2().getBowl();
         score -= game.getPlayer1().getBowl();
-        score += game.getPlayer2().HaveTuz()?10:0;
-        score -= game.getPlayer1().HaveTuz()?10:0;
+        score += game.getPlayer2().HaveTuz()?x:0;
+        score -= game.getPlayer1().HaveTuz()?x:0;
         if (myPlayer == TKCore.PLAYER1) score = -score;
         return score;
     }
