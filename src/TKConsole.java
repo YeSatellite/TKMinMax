@@ -1,35 +1,38 @@
-import java.util.Scanner;
-
 public class TKConsole {
     private TKCore core;
-    private MinMax test1;
-    private MinMax test2;
+    private MinMax0 test1;
+    private MinMax1 test2;
 
     public TKConsole() {
         this.core = new TKCore();
-        this.test1 = new MinMax(core, TKCore.PLAYER1, 7);
-        this.test2 = new MinMax(core, TKCore.PLAYER2, 10);
+        this.test1 = new MinMax0(core, TKCore.PLAYER1, 8);
+        this.test2 = new MinMax1(core, TKCore.PLAYER2, 8);
     }
 
     public void start() {
-        while (true) {
-            print();
-            System.out.print("Enter: ");
-            if (core.getCurrentPlayer()== TKCore.PLAYER1) {
-                int pit = test1.find();
-                System.out.println(pit+1);
-                core.move(pit);
-            }else {
-                int pit = test2.find();
-                System.out.println(pit+1);
-                core.move(pit);
-            }
-            if(core.finish()){
-                print();
-                System.out.println("End----------------------------");
-                break;
+        int s1 = 0;
+        int s2 = 0;
+        for (int i = 0; i < 10; i++) {
+            this.core = new TKCore();
+            this.test1 = new MinMax0(core, TKCore.PLAYER1, 7);
+            this.test2 = new MinMax1(core, TKCore.PLAYER2, 7);
+            while (true) {
+                if (core.getCurrentPlayer() == TKCore.PLAYER1) {
+                    int pit = test1.find();
+                    core.move(pit);
+                } else {
+                    int pit = test2.find();
+                    core.move(pit);
+                }
+                if (core.finish()) {
+                    System.out.println(core.getPlayer1().getBowl()+":"+core.getPlayer2().getBowl());
+                    s1 += core.getPlayer1().getBowl()>core.getPlayer2().getBowl()?1:0;
+                    s2 += core.getPlayer1().getBowl()<core.getPlayer2().getBowl()?1:0;
+                    break;
+                }
             }
         }
+        System.out.println(s1+"<>"+s2);
     }
 
     public void print() {

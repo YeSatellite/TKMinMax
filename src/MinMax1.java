@@ -1,15 +1,18 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
-public class MinMax {
+public class MinMax1 {
     private TKCore core;
     private boolean myPlayer;
     private int depth;
+    private Random r;
 
-    public MinMax(TKCore core,boolean myPlayer, int depth) {
+    public MinMax1(TKCore core, boolean myPlayer, int depth) {
         this.core = core;
         this.myPlayer = myPlayer;
         this.depth = depth;
+        r = new Random();
     }
 
     public int find(){
